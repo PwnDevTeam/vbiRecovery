@@ -1,0 +1,21 @@
+vbiRecovery - A VB.NET implementation of iRecovery
+Programmed by Fallensn0w.
+
+It's completely open-source, the source-code is released under the terms of the GNU General Public License version 3.
+
+usage:
+  ./vbiRecovery.exe -s             		starts a shell.
+  ./vbiRecovery.exe -c <cmd>       		sends a stand-alone command.
+  ./vbiRecovery.exe -k <file>      		sends your payload + exploit
+  ./vbiRecovery.exe -b                  if choosen true it will boot, otherwise it would be in recovery loop.
+  ./vbiRecovery.exe -x <file>      		runs batch commands from a file(one per line).
+  ./vbiRecovery.exe -f <file>      		uploads a file.
+
+  ./vbiRecovery.exe -0xA1 <cmd>   		sends a raw to 0xA1
+  ./vbiRecovery.exe -0x40 <cmd>    		sends a raw to 0x40
+  ./vbiRecovery.exe -0x21 <cmd>    		sends a raw to 0x21
+  ./vbiRecovery.exe -arm7          		sends the 2.1.1 iPod Touch 2G arm7_go exploit
+
+Extra commands inside vbiRecovery Shell:
+   /exit                                exits the program, disposes current connection.
+   /sleep <val>                         this will make vbiRecovery wait <val> in milliseconds (ms).

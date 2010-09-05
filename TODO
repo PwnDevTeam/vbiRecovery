@@ -1,0 +1,11 @@
+TODO's for vbiRecovery.
+
+Currently we gotta do following:
+
+	-	Make uploading files, couldn't be that hard, atleast not when TRYING to program lmfao.
+	
+	- 	Uploading payload, could be easily done if uploading files subroutine is coded. (CnP job kindof)
+	
+	-	A better shell (get iBoot data like the original one)
+	
+	-	Enter Recovery mode command ( Could be done by using iTunesMobileDevice.dll )

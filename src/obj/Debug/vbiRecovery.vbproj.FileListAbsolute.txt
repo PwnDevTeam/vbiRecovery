@@ -1,0 +1,11 @@
+C:\Users\Thim\Desktop\iPhone_dev\vbiRecovery\src\bin\Debug\vbiRecovery.exe
+C:\Users\Thim\Desktop\iPhone_dev\vbiRecovery\src\bin\Debug\vbiRecovery.pdb
+C:\Users\Thim\Desktop\iPhone_dev\vbiRecovery\src\bin\Debug\vbiRecovery.xml
+C:\Users\Thim\Desktop\iPhone_dev\vbiRecovery\src\bin\Debug\LibUsbDotNet.dll
+C:\Users\Thim\Desktop\iPhone_dev\vbiRecovery\src\bin\Debug\LibUsbDotNet.xml
+C:\Users\Thim\Desktop\iPhone_dev\vbiRecovery\src\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Thim\Desktop\iPhone_dev\vbiRecovery\src\obj\Debug\vbiRecovery.Resources.resources
+C:\Users\Thim\Desktop\iPhone_dev\vbiRecovery\src\obj\Debug\vbiRecovery.vbproj.GenerateResource.Cache
+C:\Users\Thim\Desktop\iPhone_dev\vbiRecovery\src\obj\Debug\vbiRecovery.exe
+C:\Users\Thim\Desktop\iPhone_dev\vbiRecovery\src\obj\Debug\vbiRecovery.xml
+C:\Users\Thim\Desktop\iPhone_dev\vbiRecovery\src\obj\Debug\vbiRecovery.pdb
