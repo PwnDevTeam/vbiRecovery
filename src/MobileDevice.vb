@@ -27,7 +27,6 @@ Class MobileDevice
     Private mMode As DeviceMode = DeviceMode.Recovery
     Public mDevice As UsbDevice
 
-    Public OuputNeeded As Boolean
     Private mdPositive As String = "SUCCESS"
     Private mdNegative As String = "FAILURE"
 
@@ -46,8 +45,8 @@ Class MobileDevice
             Return False
         End If
     End Function
-    Public Function AutoBoot() As Boolean
-        If SendCommand("setenv auto-boot true") Then
+    Public Function AutoBoot(ByVal mode As Boolean) As Boolean
+        If SendCommand("setenv auto-boot " & mode.ToString) Then
             If SendCommand("saveenv") Then
                 If SendCommand("reboot") Then
                     WriteLog("AutoBoot - " & mdPositive)
@@ -151,12 +150,13 @@ Class MobileDevice
             WriteLog("SendCommand - Command Is Too Long") : Return False
         End If
 
+        ' ummm.. how come this if-statement is inverted?
         If iSendRaw(&H40, 0, 0, 0, command, CShort(command.Length)) Then
-            WriteLog("SendCommand - " & mdPositive)
-            Return True
-        Else
             WriteLog("SendCommand - " & mdNegative)
             Return False
+        Else
+            WriteLog("SendCommand - " & mdPositive)
+            Return True
         End If
 
     End Function
@@ -199,11 +199,11 @@ Class MobileDevice
 
         ' the SendRAW status is fucked up, i dont want to fix it atm.
         If mDevice.ControlTransfer(setupPacket, data, length, transfered) Then
-            '         WriteLog("SendRaw - " & mdNegative)
-            '            Return True
-            '       Else
-            '            '       WriteLog("SendRaw - " & mdPositive)
-            '           Return False
+            WriteLog("SendRaw - " & mdNegative)
+            Return True
+        Else
+            WriteLog("SendRaw - " & mdPositive)
+            Return False
         End If
 
     End Function
@@ -220,7 +220,7 @@ Class MobileDevice
         If iSendRaw(&HA1, Len(command), 0, 0, 0, 0) Then
             WriteLog("SendRawUsb_0xA1 - " & mdPositive) : Return True
         Else
-            WriteLog("SendRawUsb_0xA1 - FAIL") : Return False
+            WriteLog("SendRawUsb_0xA1 - " & mdNegative) : Return False
         End If
     End Function
     Public Function SendRawUsb_0x40(ByVal command As String) As Boolean
@@ -228,7 +228,7 @@ Class MobileDevice
         If iSendRaw(&H40, Len(command), 0, 0, 0, 0) Then
             WriteLog("SendRawUsb_0x40 - " & mdPositive) : Return True
         Else
-            WriteLog("SendRawUsb_0x40 - FAIL") : Return False
+            WriteLog("SendRawUsb_0x40 - " & mdNegative) : Return False
         End If
     End Function
     Public Function SendRawUsb_0x21(ByVal command As String) As Boolean
@@ -236,7 +236,7 @@ Class MobileDevice
         If iSendRaw(&H21, Len(command), 0, 0, 0, 0) Then
             WriteLog("SendRawUsb_0x21 - " & mdPositive) : Return True
         Else
-            WriteLog("SendRawUsb_0x21 - FAIL") : Return False
+            WriteLog("SendRawUsb_0x21 - " & mdNegative) : Return False
         End If
     End Function
 
@@ -296,20 +296,18 @@ Class MobileDevice
 #Region " I/O Functions "
 
 
-    Public Function SaveTextToFile(ByVal strData As String, ByVal FullPath As String, Optional ByVal ErrInfo As String = "") As Boolean
-        Dim bAns As Boolean = False, objReader As StreamWriter : Try : objReader = New StreamWriter(FullPath) : objReader.Write(strData) : objReader.Close() : bAns = True : Catch Ex As Exception : ErrInfo = Ex.Message : End Try : Return bAns
-    End Function
-    Public Function GetFileContents(ByVal FullPath As String, Optional ByRef ErrInfo As String = "") As String
-        Dim strContents As String = "" : Dim objReader As StreamReader : Try : objReader = New StreamReader(FullPath) : strContents = objReader.ReadToEnd() : objReader.Close() : Catch Ex As Exception : ErrInfo = Ex.Message : End Try : Return strContents
-    End Function
+    '   Public Function SaveTextToFile(ByVal strData As String, ByVal FullPath As String, Optional ByVal ErrInfo As String = "") As Boolean
+    '       Dim bAns As Boolean = False, objReader As StreamWriter : Try : objReader = New StreamWriter(FullPath) : objReader.Write(strData) : objReader.Close() : bAns = True : Catch Ex As Exception : ErrInfo = Ex.Message : End Try : Return bAns
+    '   End Function
+    '   Public Function GetFileContents(ByVal FullPath As String, Optional ByRef ErrInfo As String = "") As String
+    '        Dim strContents As String = "" : Dim objReader As StreamReader : Try : objReader = New StreamReader(FullPath) : strContents = objReader.ReadToEnd() : objReader.Close() : Catch Ex As Exception : ErrInfo = Ex.Message : End Try : Return strContents
+    '    End Function
 
     Public Sub WriteLog(ByVal Text As String)
-        old = GetFileContents("MobileDevice.txt")
-        'SaveTextToFile((old & "MobileDevice" & " @ " & TimeOfDay & " -> " & LCase(Text)) & vbCrLf, "MobileDevice.txt")
+        ' old = GetFileContents("MobileDevice.txt")
+        ' SaveTextToFile((old & "MobileDevice" & " @ " & TimeOfDay & " -> " & LCase(Text)) & vbCrLf, "MobileDevice.txt")
 
-        If OuputNeeded = True Then
-            Console.WriteLine(" MobileDevice" & " @ " & TimeOfDay & " -> " & LCase(Text))
-        End If
+        Console.WriteLine(" MobileDevice" & " @ " & TimeOfDay & " -> " & LCase(Text))
 
     End Sub
 
@@ -325,5 +323,4 @@ Class MobileDevice
 
 
 End Class
-
 

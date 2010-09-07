@@ -24,21 +24,23 @@ Module vbiRecovery
 
             Console.WriteLine(iAbout)
 
-            iDev.OuputNeeded = True
-            If iDev.Connect() = False Then End
+            If iDev.Connect() = False Then
+                Console.Clear()
+                Console.WriteLine(iAbout & vbCrLf & _
+                                  " No iPhone/iPod found.")
+                End
+            End If
 
             If InStr(xCMD, "-c ") Then
-                iDev.OuputNeeded = True
                 xCMD = Replace(xCMD, "-c ", "")
                 iDev.SendCommand(xCMD)
 
             ElseIf InStr(xCMD, "-b") Then
-                iDev.OuputNeeded = False
-                xCMD = Replace(xCMD, "-b ", "")
-                iDev.AutoBoot()
+                xCMD = Replace(xCMD, "-b", "") : xCMD = xCMD.Replace(" ", "")
+                If xCMD = "false" Then iDev.AutoBoot(False)
+                iDev.AutoBoot(True)
 
             ElseIf InStr(xCMD, "-x ") Then
-                iDev.OuputNeeded = False
                 Dim batch As String = Replace(xCMD, "-x ", "")
                 Dim batchText As String = GetFileContents(batch)
                 Dim batchLine() As String = Split(batchText, vbCrLf)
@@ -60,8 +62,9 @@ Module vbiRecovery
                 WriteLog("Done Sending Commands From Batch File. (" & batch & ")")
 
             ElseIf InStr(xCMD, "-s") Then
-                Dim prompt As Integer = 0
-                While prompt = 0
+
+                While (True)
+
                     Console.Write("$ ")
                     tempCMD = Console.ReadLine()
 
@@ -74,21 +77,20 @@ Module vbiRecovery
                             Application.DoEvents()
                         Next
 
-                    ElseIf InStr(tempCMD, "/autoboot ") Then
-                        tempCMD = Replace(tempCMD, "/autoboot ", "")
-                        iDev.AutoBoot()
+                    ElseIf InStr(tempCMD, "/autoboot") Then
+                        tempCMD = Replace(tempCMD, "/autoboot", "") : tempCMD = Replace(tempCMD, " ", "")
+                        If tempCMD = "false" Then iDev.AutoBoot(False)
+                        iDev.AutoBoot(True)
 
                     Else ' if its just a normal command.
                         iDev.SendCommand(tempCMD)
                     End If
+
                 End While
 
             ElseIf InStr(xCMD, "-f ") Then
-                iDev.OuputNeeded = True
                 xCMD = Replace(xCMD, "-f ", "")
                 iDev.SendFile(xCMD)
-
-
 
             ElseIf InStr(xCMD, "0xA1 ") Then
                 xCMD = Replace(xCMD, "0xA1 ", "") : iDev.SendRawUsb_0xA1(xCMD)
@@ -99,18 +101,16 @@ Module vbiRecovery
             ElseIf InStr(xCMD, "0x21 ") Then
                 xCMD = Replace(xCMD, "0x21 ", "") : iDev.SendRawUsb_0x21(xCMD)
 
-
             ElseIf (InStr(xCMD, "-arm7")) Then
-                iDev.OuputNeeded = True
                 iDev.Send_Arm7_Go()
 
             ElseIf (InStr(xCMD, "-k ")) Then
-                iDev.OuputNeeded = True
                 xCMD = Replace(xCMD, "-k ", "")
                 iDev.SendPayload(xCMD)
 
             Else
-                Console.WriteLine("Error while executing arguement: '" & xCMD & "'")
+                Console.WriteLine(" Error while executing arguement: '" & xCMD & "'")
+                Console.ReadLine()
                 End
 
             End If
@@ -118,7 +118,12 @@ Module vbiRecovery
             ' releases our connection
             iDev.Dispose()
 
+            ' Console.Write(vbCrLf & " Press any key to exit . . .")
+            'Console.Read()
+
+
         Else
+
             Console.WriteLine(iAbout & vbCrLf & _
                                         "       ./vbiRecovery.exe -c <cmd>         sends a stand-alone command." & vbCrLf & _
                                         "       ./vbiRecovery.exe -b               this will send the commands needed for recovery loop fix." & vbCrLf & _
@@ -127,6 +132,7 @@ Module vbiRecovery
                                         "       ./vbiRecovery.exe -f <file>        uploads a file." & vbCrLf & vbCrLf & _
                                         vbCrLf _
                                         )
+
         End If
 
     End Sub
